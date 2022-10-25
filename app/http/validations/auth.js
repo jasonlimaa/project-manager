@@ -45,6 +45,24 @@ function registerValidator() {
       }),
   ];
 }
+function loginValidator() {
+  return [
+    body("username")
+      .notEmpty()
+      .withMessage("username cannot be empty")
+      .custom(async (value) => {
+        if (value) {
+          const usernameRegexp = /^[a-z]+[a-z0-9\_\.]{2,}/gi;
+          if (usernameRegexp.test(value)) {
+            return true;
+          }
+          throw "username is not correct";
+        }
+      }),
+    body("password").isLength({ min: 6, max: 16 }).withMessage("password must be at least 6 and utmost 16 characters"),
+  ];
+}
 module.exports = {
   registerValidator,
+  loginValidator,
 };

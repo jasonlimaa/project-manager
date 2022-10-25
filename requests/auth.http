@@ -1,4 +1,4 @@
-##register request
+### register request
 POST http://localhost:3000/auth/register
 Content-Type: application/json
 
@@ -8,4 +8,15 @@ Content-Type: application/json
     "mobile":"09179663322",
     "password":"1234512345",
     "confirm_password":"1234512345"
+}
+
+
+### login request
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+Authorization: Bearer {{$dotenv JWT_TOKEN}}
+
+{
+    "username":"ali1995ez2",
+    "password":"1234512345"
 }
