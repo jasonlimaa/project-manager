@@ -9,7 +9,14 @@ function tokenGenerator(payload) {
   const token = jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: "3 days" });
   return token;
 }
+function verifyJwtToken(token) {
+  // eslint-disable-next-line no-undef
+  const result = jwt.verify(token, process.env.SECRET_KEY);
+  if (!result?.username) throw { status: 401, message: "please login" };
+  return result;
+}
 module.exports = {
   hashString,
   tokenGenerator,
+  verifyJwtToken,
 };

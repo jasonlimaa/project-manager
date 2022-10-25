@@ -1,0 +1,4 @@
+### get user profile
+GET http://localhost:3000/user/profile
+Authorization: Bearer {{$dotenv JWT_TOKEN}}
+
