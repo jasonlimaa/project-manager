@@ -2,3 +2,14 @@
 GET http://localhost:3000/user/profile
 Authorization: Bearer {{$dotenv JWT_TOKEN}}
 
+
+### update user profile
+POST http://localhost:3000/user/profile
+Authorization: Bearer {{$dotenv JWT_TOKEN}}
+Content-Type: application/json
+
+{
+    "first_name":"erfan",
+    "last_name":"yousefi",
+    "skills":["progmming","nodejs"]
+}
