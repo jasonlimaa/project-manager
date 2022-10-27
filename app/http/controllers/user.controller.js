@@ -18,7 +18,7 @@ class UserController {
       let data = { ...req.body };
       const fields = ["first_name", "last_name", "skills"];
       const badValues = ["", " ", ".", null, undefined, 0, -1, NaN, [], {}];
-      const username = req.user.username;
+      const userID = req.user._id;
       Object.entries(data).forEach(([key, value]) => {
         if (badValues.includes(value)) {
           delete data[key];
@@ -27,7 +27,7 @@ class UserController {
           delete data[key];
         }
       });
-      const result = await UserModel.updateOne({ username }, { $set: data });
+      const result = await UserModel.updateOne({ _id: userID }, { $set: data });
       if (result.modifiedCount > 0) {
         return res.status(200).json({
           success: true,
@@ -36,6 +36,21 @@ class UserController {
         });
       }
       throw { status: 400, message: "updated not success" };
+    } catch (error) {
+      next(error);
+    }
+  }
+  async uploadProfileImage(req, res, next) {
+    try {
+      const userID = req.user._id;
+      const filePath = req.file.path.substring(7);
+      const result = await UserModel.updateOne({ _id: userID }, { $set: { profile_image: filePath } });
+      if (result.modifiedCount == 0) return { status: 400, message: "updated not success" };
+      return res.status(200).json({
+        status: 200,
+        success: true,
+        message: "profile image updated successfully",
+      });
     } catch (error) {
       next(error);
     }

@@ -10,7 +10,7 @@ const checkLogin = async (req, res, next) => {
     if (!token) throw { status: 401, message: authError };
     const result = verifyJwtToken(token);
     const { username } = result;
-    const user = await UserModel.findOne({ username }, { password: 0, __v: 0, _id: 0 });
+    const user = await UserModel.findOne({ username }, { password: 0, __v: 0 });
     if (!user) throw { status: 401, message: authError };
     req.user = user;
     next();
