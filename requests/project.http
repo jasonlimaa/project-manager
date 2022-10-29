@@ -1,0 +1,10 @@
+### update user profile
+POST http://localhost:3000/project/create
+Authorization: Bearer {{$dotenv JWT_TOKEN}}
+Content-Type: application/json
+
+{
+    "title":"title of new project",
+    "text":"text of new project for project manager of node js course",
+    "skills":["progmming","nodejs"]
+}

@@ -9,7 +9,7 @@ function hashString(str) {
 }
 function tokenGenerator(payload) {
   // eslint-disable-next-line no-undef
-  const token = jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: "3 days" });
+  const token = jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: "30 days" });
   return token;
 }
 function verifyJwtToken(token) {
