@@ -1,4 +1,4 @@
-### update user profile
+### create project
 POST http://localhost:3000/project/create
 Authorization: Bearer {{$dotenv JWT_TOKEN}}
 Content-Type: application/json
@@ -6,5 +6,19 @@ Content-Type: application/json
 {
     "title":"title of new project",
     "text":"text of new project for project manager of node js course",
-    "skills":["progmming","nodejs"]
 }
+
+### get all projects
+GET http://localhost:3000/project/list
+Authorization: Bearer {{$dotenv JWT_TOKEN}}
+Content-Type: application/json
+
+### get project by id
+GET  http://localhost:3000/project/635cd28899385fa4dbec56fe
+Authorization: Bearer {{$dotenv JWT_TOKEN}}
+Content-Type: application/json
+
+### delete project by id
+DELETE  http://localhost:3000/project/remove/635cd28899385fa4dbec56fe
+Authorization: Bearer {{$dotenv JWT_TOKEN}}
+Content-Type: application/json

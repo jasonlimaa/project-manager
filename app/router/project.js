@@ -16,10 +16,10 @@ router.post(
   expressValidatorMapper,
   ProjectController.createProject
 );
-router.post("/list", checkLogin, ProjectController.getAllProject);
-router.post("/:id", checkLogin, mongoIDvalidator(), expressValidatorMapper, ProjectController.getProjectById);
-router.post("/remove/:id", checkLogin, mongoIDvalidator(), expressValidatorMapper, ProjectController.removeProject);
-router.post("/edit/:id", checkLogin, mongoIDvalidator(), expressValidatorMapper, ProjectController.createProject);
+router.get("/list", checkLogin, ProjectController.getAllProject);
+router.get("/:id", checkLogin, mongoIDvalidator(), expressValidatorMapper, ProjectController.getProjectById);
+router.delete("/remove/:id", checkLogin, mongoIDvalidator(), expressValidatorMapper, ProjectController.removeProject);
+router.put("/edit/:id", checkLogin, mongoIDvalidator(), expressValidatorMapper, ProjectController.createProject);
 module.exports = {
   projectRoutes: router,
 };

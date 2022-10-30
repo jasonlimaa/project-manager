@@ -1,6 +1,10 @@
+const autoBind = require("auto-bind");
 const { ProjectModel } = require("../../models/project");
 
 class ProjectController {
+  constructor() {
+    autoBind(this);
+  }
   async createProject(req, res, next) {
     try {
       const { title, text, image, tags } = req.body;
@@ -30,8 +34,9 @@ class ProjectController {
     }
   }
   async findProject(projectID, owner) {
-    const project = await ProjectModel.findOne({ owner, _id: projectID });
+    const project = await ProjectModel.findOne({ _id: projectID, owner });
     if (!project) throw { status: 404, message: "project not found" };
+    console.log(project);
     return project;
   }
   async getProjectById(req, res, next) {
