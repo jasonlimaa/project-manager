@@ -14,7 +14,7 @@ Authorization: Bearer {{$dotenv JWT_TOKEN}}
 Content-Type: application/json
 
 ### get project by id
-GET  http://localhost:3000/project/635cd28899385fa4dbec56fe
+GET  http://localhost:3000/project/635d0a78b8987e0aa05b7993
 Authorization: Bearer {{$dotenv JWT_TOKEN}}
 Content-Type: application/json
 
@@ -22,3 +22,14 @@ Content-Type: application/json
 DELETE  http://localhost:3000/project/remove/635cd28899385fa4dbec56fe
 Authorization: Bearer {{$dotenv JWT_TOKEN}}
 Content-Type: application/json
+
+### edit project by id
+PUT  http://localhost:3000/project/edit/635d0a78b8987e0aa05b7993
+Authorization: Bearer {{$dotenv JWT_TOKEN}}
+Content-Type: application/json
+
+{
+    "title":"new title",
+    "text":"new text new text new text new text new text",
+    "tags":["",""]
+}

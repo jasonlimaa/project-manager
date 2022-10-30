@@ -19,7 +19,7 @@ router.post(
 router.get("/list", checkLogin, ProjectController.getAllProject);
 router.get("/:id", checkLogin, mongoIDvalidator(), expressValidatorMapper, ProjectController.getProjectById);
 router.delete("/remove/:id", checkLogin, mongoIDvalidator(), expressValidatorMapper, ProjectController.removeProject);
-router.put("/edit/:id", checkLogin, mongoIDvalidator(), expressValidatorMapper, ProjectController.createProject);
+router.put("/edit/:id", checkLogin, mongoIDvalidator(), expressValidatorMapper, ProjectController.updateProject);
 module.exports = {
   projectRoutes: router,
 };
