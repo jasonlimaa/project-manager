@@ -3,6 +3,7 @@ const { ProjectController } = require("../http/controllers/project.controller");
 const { checkLogin } = require("../http/middlewares/autoLogin");
 const { expressValidatorMapper } = require("../http/middlewares/checkErrors");
 const { createProjectValidator } = require("../http/validations/project");
+const { mongoIDvalidator } = require("../http/validations/public");
 const { uploadfile } = require("../modules/express-fileupload");
 
 const router = require("express").Router();
@@ -15,6 +16,10 @@ router.post(
   expressValidatorMapper,
   ProjectController.createProject
 );
+router.get("/list", checkLogin, ProjectController.getAllProject);
+router.get("/:id", checkLogin, mongoIDvalidator(), expressValidatorMapper, ProjectController.getProjectById);
+router.delete("/remove/:id", checkLogin, mongoIDvalidator(), expressValidatorMapper, ProjectController.removeProject);
+router.put("/edit/:id", checkLogin, mongoIDvalidator(), expressValidatorMapper, ProjectController.createProject);
 module.exports = {
   projectRoutes: router,
 };
