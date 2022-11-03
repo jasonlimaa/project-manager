@@ -1,4 +1,4 @@
-const { body } = require("express-validator");
+const { body, param } = require("express-validator");
 const { TeamModel } = require("../../models/team");
 
 function createTeamValidator() {
@@ -16,6 +16,10 @@ function createTeamValidator() {
     }),
   ];
 }
+function inviteToTeam() {
+    
+}
 module.exports = {
   createTeamValidator,
+  inviteToTeam
 };

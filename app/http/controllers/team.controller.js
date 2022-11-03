@@ -1,9 +1,13 @@
+const autoBind = require("auto-bind");
 const { TeamModel } = require("../../models/team");
+const { UserModel } = require("../../models/user");
 class TeamController {
+  constructor() {
+    autoBind(this);
+  }
   async createTeam(req, res, next) {
     try {
       const { name, description, username } = req.body;
-      console.log(name, description, username);
       const owner = req.user._id;
       const team = await TeamModel.create({
         name,
@@ -78,7 +82,43 @@ class TeamController {
       next(error);
     }
   }
-  inviteUserToTeam() {}
+  async findUserInTeam(userID, teamID) {
+    const result = await TeamModel.findOne({ $or: [{ owner: userID }, { users: userID }], _id: teamID });
+    return !!result;
+  }
+  async inviteUserToTeam(req, res, next) {
+    try {
+      const userID = req.user._id;
+      const { username, teamID } = req.params;
+      console.log(username, teamID);
+      const team = await this.findUserInTeam(userID, teamID);
+      if (!team) throw { status: 400, message: "team not found for invited" };
+      const user = await UserModel.findOne({ username });
+      if (!user) throw { status: 400, message: "user not found for invited" };
+      const userInvited = await this.findUserInTeam(user._id, teamID);
+      if (userInvited) throw { status: 400, message: "user currently exist in this team" };
+      const request = {
+        caller: req.user.username,
+        requestDate: new Date(),
+        teamID,
+        status: "pending",
+      };
+      const updateUserResult = await UserModel.updateOne(
+        { username },
+        {
+          $push: { inviteRequests: [request] },
+        }
+      );
+      if (updateUserResult.modifiedCount == 0) throw { status: 500, message: "invite not success" };
+      return res.status(200).json({
+        status: 200,
+        success: true,
+        message: "invite user successfully",
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
   removeTeam() {}
   updateTeam() {}
   removeUserFromTeam() {}

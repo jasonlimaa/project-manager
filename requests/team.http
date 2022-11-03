@@ -15,7 +15,7 @@ Authorization: Bearer {{$dotenv JWT_TOKEN}}
 Content-Type: application/json
 
 ### get team by id
-GET  http://localhost:3000/team/636357daaf72ed357121221c
+GET  http://localhost:3000/team/6363591635f88bf29c75035c
 Authorization: Bearer {{$dotenv JWT_TOKEN}}
 Content-Type: application/json
 
@@ -29,13 +29,7 @@ DELETE  http://localhost:3000/team/remove/636357daaf72ed357121221c
 Authorization: Bearer {{$dotenv JWT_TOKEN}}
 Content-Type: application/json
 
-### edit project by id
-PUT  http://localhost:3000/project/edit/635d0a78b8987e0aa05b7993
+### invite user to team
+GET  http://localhost:3000/team/invite/6363591635f88bf29c75035c/johndoe
 Authorization: Bearer {{$dotenv JWT_TOKEN}}
 Content-Type: application/json
-
-{
-    "title":"new title",
-    "text":"new text new text new text new text new text",
-    "tags":["",""]
-}
