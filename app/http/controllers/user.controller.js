@@ -57,9 +57,106 @@ class UserController {
       next(error);
     }
   }
+  async getAllRequests(req, res, next) {
+    try {
+      const userID = req.user._id;
+      const inviteRequests = await UserModel.aggregate([
+        {
+          $match: { _id: userID },
+        },
+        { $unwind: "$inviteRequests" },
+        {
+          $lookup: {
+            from: "users",
+            localField: "inviteRequests.caller",
+            foreignField: "username",
+            as: "caller",
+          },
+        },
+        {
+          $project: {
+            teamID: "$inviteRequests.teamID",
+            status: "$inviteRequests.status",
+            caller: {
+              username: "$caller.username",
+              mobile: "$caller.mobile",
+              email: "$caller.email",
+            },
+          },
+        },
+        { $unwind: "$caller" },
+        { $unwind: "$caller.username" },
+        { $unwind: "$caller.mobile" },
+        { $unwind: "$caller.email" },
+      ]);
+      
+      // const { inviteRequests } = await UserModel.findById(userID, { inviteRequests: 1 });
+      return res.json({
+        inviteRequests,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+  async geRequestsByStatus(req, res, next) {
+    try {
+      const { status } = req.params;
+      const userID = req.user._id;
+      const requests = await UserModel.aggregate([
+        {
+          $match: { _id: userID },
+        },
+        {
+          $project: {
+            _id: 0,
+            inviteRequests: {
+              $filter: {
+                input: "$inviteRequests",
+                as: "request",
+                cond: {
+                  $eq: ["$$request.status", status],
+                },
+              },
+            },
+          },
+        },
+      ]);
+      return res.status(200).json({
+        status: 200,
+        success: true,
+        requests: requests[0]?.inviteRequests || [],
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
   addSkills() {}
   editSkills() {}
-  acceptInviteInTeam() {}
+  async changeStatusRequest(req, res, next) {
+    try {
+      const { id, status } = req.params;
+      const request = await UserModel.findOne({ "inviteRequests._id": id });
+      if (!request) throw { status: 404, message: "request not found" };
+      const findRequest = request.inviteRequests.find((item) => item.id == id);
+      if (findRequest.status != "pending") throw { status: 400, message: "can`t change status" };
+      if (!["accepted", "rejected"].includes(status)) throw { status: 400, message: "entered information not correct" };
+      const updateResult = await UserModel.updateOne(
+        { "inviteRequests._id": id },
+        {
+          $set: { "inviteRequests.$.status": status },
+        }
+      );
+      if (updateResult.modifiedCount == 0) throw { status: 500, message: "change status to work" };
+      return res.status(200).json({
+        status: 200,
+        success: true,
+        message: "change status successfully",
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
   rejectInviteInTeam() {}
 }
 

@@ -17,6 +17,6 @@ Content-Type: application/json
 Authorization: Bearer {{$dotenv JWT_TOKEN}}
 
 {
-    "username":"ali1995ez2",
+    "username":"johndoe",
     "password":"1234512345"
 }

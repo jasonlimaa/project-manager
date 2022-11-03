@@ -13,3 +13,29 @@ Content-Type: application/json
     "last_name":"yousefi",
     "skills":["progmming","nodejs"]
 }
+
+
+### get all user requests
+GET http://localhost:3000/user/requests
+Authorization: Bearer {{$dotenv JWT_TOKEN}}
+Content-Type: application/json
+
+
+### get requests by status
+GET http://localhost:3000/user/requests/pending
+Authorization: Bearer {{$dotenv JWT_TOKEN}}
+Content-Type: application/json
+
+
+
+### accepted requests
+GET http://localhost:3000/user/change-status-request/636379ac6792edfe12094a5c/pending
+Authorization: Bearer {{$dotenv JWT_TOKEN}}
+Content-Type: application/json
+
+
+
+
+
+
+

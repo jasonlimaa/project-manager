@@ -33,3 +33,14 @@ Content-Type: application/json
 GET  http://localhost:3000/team/invite/6363591635f88bf29c75035c/johndoe
 Authorization: Bearer {{$dotenv JWT_TOKEN}}
 Content-Type: application/json
+
+
+### invite user to team
+PUT   http://localhost:3000/team/update/6363591635f88bf29c75035c
+Authorization: Bearer {{$dotenv JWT_TOKEN}}
+Content-Type: application/json
+
+{
+    "name":"team updated",
+    "description":"team updated description"
+}

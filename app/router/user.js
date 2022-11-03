@@ -15,6 +15,9 @@ router.post(
   checkLogin,
   UserController.uploadProfileImage
 );
+router.get("/requests",checkLogin,UserController.getAllRequests)
+router.get("/requests/:status",checkLogin,UserController.geRequestsByStatus)
+router.get("/change-status-request/:id/:status", checkLogin, UserController.changeStatusRequest);
 module.exports = {
   userRoutes: router,
 };

@@ -70,9 +70,38 @@ class TeamController {
   async getMyTeams(req, res, next) {
     try {
       const userID = req.user._id;
-      const teams = await TeamModel.find({
-        $or: [{ owner: userID }, { users: userID }],
-      });
+      const teams = await TeamModel.aggregate([
+        {
+          $match: {
+            $or: [{ owner: userID }, { users: userID }],
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "owner",
+            foreignField: "_id",
+            as: "owner",
+          },
+        },
+        {
+          $project: {
+            "owner.teams": 0,
+            "owner.skills": 0,
+            "owner.roles": 0,
+            "owner.password": 0,
+            "owner.token": 0,
+            "owner.__v": 0,
+            "owner.profile_image": 0,
+            "owner.createdAt": 0,
+            "owner.updatedAt": 0,
+            "owner.inviteRequests": 0,
+          },
+        },
+        {
+          $unwind: "$owner",
+        },
+      ]);
       return res.status(200).json({
         status: 200,
         success: true,
@@ -120,7 +149,28 @@ class TeamController {
     }
   }
   removeTeam() {}
-  updateTeam() {}
+  async updateTeam(req, res, next) {
+    try {
+      const data = { ...req.body };
+      Object.keys(data).forEach((key) => {
+        if (!data[key]) delete data[key];
+        if (["", " ", undefined, null, NaN].includes[data[key]]) delete data[key];
+      });
+      const userID = req.user._id;
+      const { teamID } = req.params;
+      const team = await TeamModel.findOne({ owner: userID, _id: teamID });
+      if (!team) throw { status: 404, message: "team not found with this info" };
+      const teamEditResult = await TeamModel.updateOne({ _id: teamID }, { $set: data });
+      if (teamEditResult.modifiedCount == 0) throw { status: 500, message: "team not updated" };
+      return res.status(200).json({
+        status: 200,
+        success: true,
+        message: "Team updated successfully",
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
   removeUserFromTeam() {}
 }
 module.exports = {
